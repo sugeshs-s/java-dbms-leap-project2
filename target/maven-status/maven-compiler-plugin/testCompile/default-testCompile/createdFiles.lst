@@ -1,0 +1,8 @@
+com\ticketdesk\controller\ShowControllerTest.class
+com\ticketdesk\controller\StudentControllerTest.class
+com\ticketdesk\service\BookingServiceTest.class
+com\ticketdesk\controller\BookingControllerTest.class
+com\ticketdesk\service\BookingIntegrationTest.class
+com\ticketdesk\service\BookingConcurrencyTest.class
+com\ticketdesk\service\ShowServiceTest.class
+com\ticketdesk\service\StudentServiceTest.class

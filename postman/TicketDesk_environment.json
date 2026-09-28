@@ -1,0 +1,31 @@
+{
+  "id": "e81d8719-74d6-444a-a038-f9b177894a48",
+  "name": "TicketDesk Local",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "studentId",
+      "value": "1",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "showId",
+      "value": "1",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "bookingId",
+      "value": "1",
+      "type": "default",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}

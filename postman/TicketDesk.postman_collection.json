@@ -1,0 +1,438 @@
+{
+  "info": {
+    "_postman_id": "4e7ea4d7-1526-4499-8ed7-0116b538ce85",
+    "name": "TicketDesk – Campus Ticket Booking System API",
+    "description": "Postman Collection for testing TicketDesk Campus Movie/Show Ticket Booking System. Follows the full recommended lifecycle from student & show creation to concurrent booking, duplicate validation, and cancellation.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "studentId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "showId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "bookingId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Student Operations",
+      "item": [
+        {
+          "name": "1.1 Create Student (Jackie)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.id) {",
+                  "    pm.collectionVariables.set(\"studentId\", jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jackie\",\n  \"email\": \"jackie@campus.edu\",\n  \"department\": \"Computer Science\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/students",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "students"]
+            }
+          }
+        },
+        {
+          "name": "1.2 Get All Students",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/students",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "students"]
+            }
+          }
+        },
+        {
+          "name": "1.3 Get Student by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "students", "{{studentId}}"]
+            }
+          }
+        },
+        {
+          "name": "1.4 Update Student",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jackie Chan\",\n  \"email\": \"jackie.chan@campus.edu\",\n  \"department\": \"Computer Science & Engineering\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "students", "{{studentId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Show Operations",
+      "item": [
+        {
+          "name": "2.1 Create Show (Avengers)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.id) {",
+                  "    pm.collectionVariables.set(\"showId\", jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Avengers: Endgame\",\n  \"showDate\": \"2026-10-05\",\n  \"showTime\": \"18:00\",\n  \"totalSeats\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/shows",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shows"]
+            }
+          }
+        },
+        {
+          "name": "2.2 Get All Shows",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/shows",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shows"]
+            }
+          }
+        },
+        {
+          "name": "2.3 Filter Shows (By Title)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/shows?title=Avengers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shows"],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "Avengers"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.4 Filter Shows (By Date & Availability)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/shows?date=2026-10-05&available=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shows"],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-10-05"
+                },
+                {
+                  "key": "available",
+                  "value": "true"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.5 Get Show by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/shows/{{showId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shows", "{{showId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Booking Operations & Business Rules",
+      "item": [
+        {
+          "name": "3.1 Book Ticket (Valid)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "pm.expect(jsonData.status).to.eql(\"CONFIRMED\");",
+                  "pm.expect(jsonData.message).to.eql(\"Ticket booked successfully\");",
+                  "if (jsonData.id) {",
+                  "    pm.collectionVariables.set(\"bookingId\", jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": {{studentId}},\n  \"showId\": {{showId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings"]
+            }
+          }
+        },
+        {
+          "name": "3.2 Verify Seat Count Decreased",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Available seats decreased to 99\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.availableSeats).to.eql(jsonData.totalSeats - 1);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/shows/{{showId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shows", "{{showId}}"]
+            }
+          }
+        },
+        {
+          "name": "3.3 Try Duplicate Booking (Should Return 409 Conflict)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409 Conflict\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "pm.expect(jsonData.message).to.eql(\"Student has already booked this show\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": {{studentId}},\n  \"showId\": {{showId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings"]
+            }
+          }
+        },
+        {
+          "name": "3.4 Get Booking by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings", "{{bookingId}}"]
+            }
+          }
+        },
+        {
+          "name": "3.5 Get Student Bookings",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}/bookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "students", "{{studentId}}", "bookings"]
+            }
+          }
+        },
+        {
+          "name": "3.6 Get Show Bookings",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/shows/{{showId}}/bookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shows", "{{showId}}", "bookings"]
+            }
+          }
+        },
+        {
+          "name": "3.7 Cancel Booking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "pm.expect(jsonData.status).to.eql(\"CANCELLED\");",
+                  "pm.expect(jsonData.message).to.eql(\"Booking cancelled successfully\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings", "{{bookingId}}"]
+            }
+          }
+        },
+        {
+          "name": "3.8 Verify Seat Count Restored",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Available seats restored to total seats\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.availableSeats).to.eql(jsonData.totalSeats);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/shows/{{showId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shows", "{{showId}}"]
+            }
+          }
+        },
+        {
+          "name": "3.9 Try Cancelling Already Cancelled Booking (Should Return 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "pm.expect(jsonData.message).to.eql(\"Booking is already cancelled\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "bookings", "{{bookingId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
